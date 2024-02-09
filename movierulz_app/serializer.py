@@ -10,19 +10,13 @@ class MovieSerializer(serializers.Serializer):
     release_year = serializers.DateField()
     hero_name = serializers.CharField()
 
-
-
     def create(self, validated_data):
         return MovieList.objects.create(**validated_data)
 
-
     def update(self, instance, validated_data):
-        instance.movie_name=validated_data.get('movie_name',instance.movie_name)
-        instance.description=validated_data.get('description',instance.description)
-        instance.release_year=validated_data.get('release_year',instance.release_year)
-        instance.hero_name=validated_data.get('hero_name',instance.hero_name)
+        instance.movie_name = validated_data.get('movie_name', instance.movie_name)
+        instance.description = validated_data.get('description', instance.description)
+        instance.release_year = validated_data.get('release_year', instance.release_year)
+        instance.hero_name = validated_data.get('hero_name', instance.hero_name)
         instance.save()
         return instance
-
-
-
