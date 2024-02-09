@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import CASCADE
 
 
 # Create your models here.
@@ -10,3 +11,11 @@ class MovieList(models.Model):
 
     def __str__(self):
         return self.movie_name
+
+#
+# class Review(models.Model):
+#     movie_name=models.ForeignKey(to=MovieList,on_delete=CASCADE)
+#     review_desc=models.TextField
+
+
+
