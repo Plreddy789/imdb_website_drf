@@ -82,7 +82,7 @@ class MovieListAV(APIView):
             return Response({"data":serializer.data,"message":"successfully created the data"},
                             status=status.HTTP_201_CREATED)
         else:
-            return Response({"message":"enter  the valid data"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class MovieDetails(APIView):
@@ -108,3 +108,5 @@ class MovieDetails(APIView):
         queryset=MovieList.objects.get(pk=pk)
         queryset.delete()
         return Response({"message":"successfully deleted"},status=status.HTTP_204_NO_CONTENT)
+
+
