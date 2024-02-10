@@ -1,37 +1,53 @@
+from movierulz_app.models import VideosList, StreamPlatform, Reviews
 from rest_framework import serializers
 
-from movierulz_app.models import VideosList, StreamPlatform
+from rest_framework import serializers
 
 
-class StreamPlatformSerializer(serializers.ModelSerializer):
+class ReviewSerializer(serializers.ModelSerializer):
+    # movie_name = serializers.SerializerMethodField()
+    # reviewer_name = serializers.SerializerMethodField()
+
     class Meta:
-        model = StreamPlatform
-        fields = "__all__"
+        model = Reviews
+        fields = '__all__'
+
+    # def get_movie_name(self, reviews):
+    #     return reviews.movie_name.movie_name
+    #
+    # def get_reviewer_name(self, reviews):
+    #     return reviews.reviewer_name.username
 
 
 class VideosListSerializer(serializers.ModelSerializer):
-    # len_movie_name = serializers.SerializerMethodField()
+    reviews = ReviewSerializer(many=True, read_only=True)
 
     class Meta:
         model = VideosList
+        fields = ['id', 'movie_name', 'description', 'release_year', 'hero_name', 'reviews']
+
+
+class StreamPlatformSerializer(serializers.ModelSerializer):
+    videoslist = VideosListSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = StreamPlatform
         fields = '__all__'
 
-        # exclude=['release_year']
-
-    # def get_len_movie_name(self, obj):
-    #     return len(obj.movie_name)
-    #
-    # def validate_movie_name(self, value):
-    #     if len(value) < 4:
-    #         raise serializers.ValidationError("name is too short enter the name above 2 characters")
-    #     else:
-    #         return value
-    #
-    # def validate(self, data):
-    #     if data['movie_name'] == data['description']:
-    #         raise serializers.ValidationError('name and description should be different')
-    #     else:
-    #         return data
+# def get_len_movie_name(self, obj):
+#     return len(obj.movie_name)
+#
+# def validate_movie_name(self, value):
+#     if len(value) < 4:
+#         raise serializers.ValidationError("name is too short enter the name above 2 characters")
+#     else:
+#         return value
+#
+# def validate(self, data):
+#     if data['movie_name'] == data['description']:
+#         raise serializers.ValidationError('name and description should be different')
+#     else:
+#         return data
 
 # class MovieSerializer(serializers.Serializer):
 #     id = serializers.IntegerField(read_only=True)
