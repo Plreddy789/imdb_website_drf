@@ -3,7 +3,7 @@
 # from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
 from rest_framework import status, mixins, generics, viewsets
-from rest_framework.authentication import BasicAuthentication
+from rest_framework.authentication import BasicAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
 from rest_framework.response import Response
@@ -195,6 +195,8 @@ class VideosListDetails(APIView):
 
 class ReviewsView(generics.ListCreateAPIView):
     serializer_class = ReviewSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         # Retrieve the movie pk from the URL
@@ -209,6 +211,8 @@ class ReviewsView(generics.ListCreateAPIView):
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Reviews.objects.all()
     serializer_class = ReviewSerializer
+    permiassion_class=[IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
 
 
 class ReviewCreate(generics.CreateAPIView):
@@ -255,4 +259,4 @@ class StreamPlatformVS(viewsets.ModelViewSet):
     queryset = StreamPlatform.objects.all()
     serializer_class = StreamPlatformSerializer
     permission_classes = [IsAuthenticated]
-    authentication_classes = [BasicAuthentication]
+    authentication_classes = [TokenAuthentication]

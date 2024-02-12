@@ -20,5 +20,5 @@ urlpatterns = [
     path('list/<int:pk>', VideosListDetails.as_view()),
     path('stream/<int:pk>/reviews/',ReviewsView.as_view()),
     path('stream/<int:pk>/review_create/',ReviewCreate.as_view()),
-    path('stream/reviews/<int:pk>',ReviewDetail.as_view()),
+    path('stream/reviews/<int:pk>/',ReviewDetail.as_view()),
 ]
