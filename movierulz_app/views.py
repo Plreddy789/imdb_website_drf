@@ -7,10 +7,14 @@ from rest_framework.authentication import BasicAuthentication, TokenAuthenticati
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
 from rest_framework.response import Response
+from rest_framework.throttling import UserRateThrottle, AnonRateThrottle, ScopedRateThrottle
 from rest_framework.views import APIView
 
 from .models import VideosList, StreamPlatform, Reviews
+from .pagination import VideoListPagination
+from .permissions import AdminOrReadOnly
 from .serializers import VideosListSerializer, StreamPlatformSerializer, ReviewSerializer
+from .throttling import ReviewDetailThrottle
 
 
 # Create your views here.
@@ -195,8 +199,11 @@ class VideosListDetails(APIView):
 
 class ReviewsView(generics.ListCreateAPIView):
     serializer_class = ReviewSerializer
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    # authentication_classes = [TokenAuthentication]
+    # permission_classes = [IsAuthenticated]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope='review_list'
+    pagination_class = VideoListPagination
 
     def get_queryset(self):
         # Retrieve the movie pk from the URL
@@ -211,8 +218,9 @@ class ReviewsView(generics.ListCreateAPIView):
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Reviews.objects.all()
     serializer_class = ReviewSerializer
-    permiassion_class=[IsAuthenticated]
-    authentication_classes = [TokenAuthentication]
+    # permission_classes = [AdminOrReadOnly]
+    # authentication_classes = [TokenAuthentication]
+    throttle_classes = [ReviewDetailThrottle]
 
 
 class ReviewCreate(generics.CreateAPIView):
@@ -258,5 +266,5 @@ class ReviewCreate(generics.CreateAPIView):
 class StreamPlatformVS(viewsets.ModelViewSet):
     queryset = StreamPlatform.objects.all()
     serializer_class = StreamPlatformSerializer
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [TokenAuthentication]
+    # permission_classes = [IsAuthenticated]
+    # authentication_classes = [TokenAuthentication]
